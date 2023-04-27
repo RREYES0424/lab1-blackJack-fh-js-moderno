@@ -9,8 +9,7 @@
  */
 
   let deck = [],
-    puntosJugador = 0,
-    puntosComputadora = 0;
+  puntosJugadores = [];
   const tipos = ["C", "D", "H", "S"],
     especiales = ["A", "J", "Q", "K"],
     btnPedir = document.querySelector("#btnPedir"),
@@ -19,8 +18,18 @@
     marcadores = document.querySelectorAll("small"),
     divCartasJugador = document.querySelector("#jugador-cartas"),
     divCartasComputadora = document.querySelector("#computadora-cartas");
+
+    const inicializarJuego = (numJugadores = 4) => {
+      deck = crearDeck();
+      for(let i = 0; i < numJugadores; i++){
+        puntosJugadores.push(0);
+      }
+      console.log({puntosJugadores});
+      
+    }
   //Esta funcion crea una nueva baraja Mixeada
   const crearDeck = () => {
+    deck = [];
     //Creando las cartas
     for (let i = 2; i <= 10; i++) {
       for (let tipo of tipos) {
@@ -33,12 +42,8 @@
         deck.push(especial + tipo);
       }
     }
-    //Revolviendo el mazo
-    deck = _.shuffle(deck);
-    return deck;
-  };
-
-  crearDeck();
+    return _.shuffle(deck);;
+  }
 
   //Pidiendo carta
   const pedirCarta = () => {
@@ -46,19 +51,20 @@
     if (deck.length === 0) {
       throw "No hay Cartas en el Deck";
     }
-    const carta = deck.pop();
-    return carta;
-  };
-
-  pedirCarta();
+    return deck.pop();
+  }
 
   //Dandonle valor a la carta
   const valorCarta = (carta) => {
     const valor = carta.substring(0, carta.length - 1);
     return isNaN(valor) ? (valor === "A" ? 11 : 10) : valor * 1;
-  };
+  }
 
   //Turno de la computadora, se activa cuando el jugador pierde/llega a 21 o le pica en detener
+
+  const acumularPuntos = () => {
+
+  }
 
   const turnoComputadora = (puntosMinimos) => {
     do {
@@ -76,7 +82,7 @@
     setTimeout(() => {
       mensajeFinal();
     }, 110);
-  };
+  }
 
   const mensajeFinal = () => {
     if (puntosJugador === puntosComputadora) {
@@ -92,7 +98,7 @@
     ) {
       alert("Perdiste!!!");
     }
-  };
+  }
 
   //Eventos del boton
 
@@ -114,17 +120,19 @@
       btnDetener.disabled = true;
       turnoComputadora(puntosJugador);
     }
-  });
+  })
 
   btnDetener.addEventListener("click", () => {
     btnPedir.disabled = true;
     btnDetener.disabled = true;
     turnoComputadora(puntosJugador);
-  });
+  })
 
   btnNuevo.addEventListener("click", () => {
-    deck = [];
-    deck = crearDeck();
+    console.clear();
+    inicializarJuego();
+    // deck = [];
+    // deck = crearDeck();
     puntosJugador = 0;
     puntosComputadora = 0;
     marcadores[0].innerText = 0;
@@ -133,7 +141,7 @@
     divCartasJugador.innerHTML = "";
     btnPedir.disabled = false;
     btnDetener.disabled = false;
-  });
+  })
 })();
 
 
