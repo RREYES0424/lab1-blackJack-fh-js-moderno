@@ -5,9 +5,17 @@
  * 2S = Two of Spades (Espadas)
  */
 
-let deck = [];
+let deck = [],
+puntosJugador = 0,
+puntosComputadora = 0
+;
 const tipos = ["C", "D", "H", "S"],
-  especiales = ["A", "J", "Q", "K"];
+  especiales = ["A", "J", "Q", "K"],
+  btnPedir = document.querySelector('#btnPedir'),
+  btnNuevo = document.querySelector('#btnNuevo'),
+  btnDetener = document.querySelector('#btnDetener'),
+  marcadores = document.querySelectorAll('small')
+  ;
 
 
 //Esta funcion crea una nueva baraja Mixeada
@@ -53,5 +61,10 @@ const valorCarta = ( carta ) => {
     : valor * 1;
 }
 
-const valor = valorCarta(pedirCarta());
-console.log(valor);
+//Eventos del boton
+
+btnPedir.addEventListener('click',()=> {
+  const carta = pedirCarta();
+  puntosJugador += valorCarta(carta);
+  marcadores[0].innerText = puntosJugador;
+});
