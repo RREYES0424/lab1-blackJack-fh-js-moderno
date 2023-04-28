@@ -123,7 +123,7 @@ const juego = (() => {
   btnDetener.addEventListener("click", () => {
     btnPedir.disabled = true;
     btnDetener.disabled = true;
-    turnoComputadora(puntosJugadores);
+    turnoComputadora(puntosJugadores[0]);
   })
 
   // btnNuevo.addEventListener("click", () => {
