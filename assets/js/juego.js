@@ -1,4 +1,4 @@
-(() => {
+const juego = (() => {
   "use strict"; //Le dice a JS que sea estricto a la hora de evaluar el codigo
 
   /**
@@ -20,11 +20,14 @@
 
     const inicializarJuego = (numJugadores = 2) => {
       deck = crearDeck();
+      puntosJugadores = [];
       for(let i = 0; i < numJugadores; i++){
         puntosJugadores.push(0);
       }
-      console.log({puntosJugadores});
-      
+      marcadores.forEach(elem => elem.innerText = 0);
+      divCartasJugadores.forEach(elem => elem.innerHTML = '');
+      btnPedir.disabled = false;
+      btnDetener.disabled = false;
     }
   //Esta funcion crea una nueva baraja Mixeada
   const crearDeck = () => {
@@ -72,18 +75,9 @@
       imgCarta.classList.add("carta");
       divCartasJugadores[turno].append(imgCarta);
   }
-  
-  //Turno de la computadora, se activa cuando el jugador pierde/llega a 21 o le pica en detener
-  const turnoComputadora = (puntosMinimos) => {
-    let puntosComputadora = 0;
-    do {
-      const carta = pedirCarta();
-      puntosComputadora = acumularPuntos(carta,puntosJugadores.length - 1);
-      crearCarta(carta,puntosJugadores.length-1);
-      if (puntosMinimos > 21) {
-        break;
-      }
-    } while (puntosComputadora < puntosMinimos && puntosMinimos <= 21);
+
+  const determinarGanador = () => {
+    const [puntosMinimos,puntosComputadora] = puntosJugadores;
     setTimeout(() => {
       if( puntosComputadora === puntosMinimos ) {
           alert('Nadie gana :(');
@@ -95,6 +89,17 @@
           alert('Computadora Gana')
       }
   }, 100 );
+  }
+  
+  //Turno de la computadora, se activa cuando el jugador pierde/llega a 21 o le pica en detener
+  const turnoComputadora = (puntosMinimos) => {
+    let puntosComputadora = 0;
+    do {
+      const carta = pedirCarta();
+      puntosComputadora = acumularPuntos(carta,puntosJugadores.length - 1);
+      crearCarta(carta,puntosJugadores.length-1);
+    } while (puntosComputadora < puntosMinimos && puntosMinimos <= 21);
+    determinarGanador();
   }
 
   //Eventos del boton
@@ -121,20 +126,14 @@
     turnoComputadora(puntosJugadores);
   })
 
-  btnNuevo.addEventListener("click", () => {
-    console.clear();
-    inicializarJuego();
-    // deck = [];
-    // deck = crearDeck();
-    // puntosJugador = 0;
-    // puntosComputadora = 0;
-    // marcadores[0].innerText = 0;
-    // marcadores[1].innerText = 0;
-    // divCartasComputadora.innerHTML = "";
-    // divCartasJugador.innerHTML = "";
-    // btnPedir.disabled = false;
-    // btnDetener.disabled = false;
-  })
+  // btnNuevo.addEventListener("click", () => {
+  //   inicializarJuego();
+  // })
+
+  return {
+    nuevoJuego: inicializarJuego
+  };
+
 })();
 
 
